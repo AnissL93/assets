@@ -8,3 +8,12 @@ Large files for [personal-infra](https://github.com/AnissL93/personal-infra), ke
 - `wallpapers/originals/`: the source pictures the theme wallpapers were made from (`NAME-original.*`).
 
 A clone is only needed to add wallpapers (`~/System/assets`); using the themes needs no clone.
+
+## Other wallpaper collections
+
+Not used by any theme; forks kept for browsing, never cloned by the setup:
+
+- [AnissL93/wallpapers](https://github.com/AnissL93/wallpapers) (fork of makccr/wallpapers, ~2.7 GB, mostly 4K)
+- [AnissL93/walls-catppuccin-mocha](https://github.com/AnissL93/walls-catppuccin-mocha) (fork of orangci/walls-catppuccin-mocha)
+
+`changebg DIR` sets a random image from any folder, e.g. a clone of one of these.
