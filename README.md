@@ -5,6 +5,7 @@ Large files for [personal-infra](https://github.com/AnissL93/personal-infra), ke
 - `wallpapers/`: the wallpapers of the desktop colour themes (`NAME-2560.png`, `NAME-3440.png`).
   Theme files in `dotfiles/themes/*.conf` name them; the `theme` script downloads each one into
   `~/.local/share/wallpapers` the first time that theme is used.
+- `fonts/`: every font the desktop uses, with licences, originals and previews: [`fonts/README.md`](fonts/README.md).
 - `wallpapers/originals/`: the source pictures the theme wallpapers were made from (`NAME-original.*`).
 
 A clone is only needed to add wallpapers (`~/System/assets`); using the themes needs no clone.
