@@ -24,13 +24,17 @@ ICONS = {
 }
 
 
-def font_file(folder):
+# extra styles that get their own preview, previews/FOLDER-style.png
+STYLES = {"fizzy-bubbles-code": ["Italic"]}
+
+
+def font_file(folder, style="Regular"):
     files = sorted(glob.glob(os.path.join(HERE, folder, "*.ttf")))
-    return next((f for f in files if "Regular" in f), files[0])
+    return next((f for f in files if f.endswith(f"-{style}.ttf")), files[0])
 
 
-def render(folder):
-    path = font_file(folder)
+def render(folder, style="Regular"):
+    path = font_file(folder, style)
     tt = TTFont(path, lazy=True)
     cmap, family = tt.getBestCmap(), tt["name"].getBestFamilyName()
     has = lambda s: all(ord(c) in cmap for c in s if not c.isspace())
@@ -63,7 +67,7 @@ def render(folder):
         y += h
     d.fontmode = "1"
     d.text((PAD, img.height - PAD - 4), f"{family} · {os.path.basename(path)} · {len(cmap)} glyphs", font=meta, fill=DIM)
-    out = os.path.join(HERE, "previews", folder + ".png")
+    out = os.path.join(HERE, "previews", folder + ("" if style == "Regular" else "-" + style.lower()) + ".png")
     img.save(out, optimize=True)
     return out
 
@@ -72,3 +76,5 @@ if __name__ == "__main__":
     os.makedirs(os.path.join(HERE, "previews"), exist_ok=True)
     for folder in sorted(d for d in os.listdir(HERE) if glob.glob(os.path.join(HERE, d, "*.ttf"))):
         print(render(folder))
+        for style in STYLES.get(folder, []):
+            print(render(folder, style))

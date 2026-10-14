@@ -35,6 +35,7 @@ they are also on the website: <https://anissl93.github.io/personal-infra/#fonts>
 
 **Fizzy Bubbles Code** · [original](https://github.com/googlefonts/fuzzy-bubbles) · [source](https://github.com/AnissL93/fizzy-bubbles-code)
 ![Fizzy Bubbles Code](previews/fizzy-bubbles-code.png)
+![Fizzy Bubbles Code Italic](previews/fizzy-bubbles-code-italic.png)
 
 **typicons** · [original](https://github.com/stephenhutchings/typicons.font) (first row: the status-bar icons)
 ![typicons](previews/typicons.png)
