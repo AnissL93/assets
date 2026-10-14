@@ -24,17 +24,17 @@ ICONS = {
 }
 
 
-# extra styles that get their own preview, previews/FOLDER-style.png
-STYLES = {"fizzy-bubbles-code": ["Italic"]}
+# families shown in every style, one labelled block each
+STYLES = {"fizzy-bubbles-code": ["Regular", "Bold", "Italic", "Bold Italic"]}
 
 
 def font_file(folder, style="Regular"):
     files = sorted(glob.glob(os.path.join(HERE, folder, "*.ttf")))
-    return next((f for f in files if f.endswith(f"-{style}.ttf")), files[0])
+    return next((f for f in files if f.endswith(f"-{style.replace(' ', '')}.ttf")), files[0])
 
 
-def render(folder, style="Regular"):
-    path = font_file(folder, style)
+def render(folder):
+    path = font_file(folder)
     tt = TTFont(path, lazy=True)
     cmap, family = tt.getBestCmap(), tt["name"].getBestFamilyName()
     has = lambda s: all(ord(c) in cmap for c in s if not c.isspace())
@@ -50,7 +50,12 @@ def render(folder, style="Regular"):
         rows += [(big, [chr(c) for c in cps[i:i + per]]) for i in range(0, len(cps), per)]
     else:
         rows.append((big, family if has(family) else "Aa 字"))
-        rows += [(body, s) for s in LATIN if has(s)]
+        if folder in STYLES:
+            for style in STYLES[folder]:
+                face = ImageFont.truetype(font_file(folder, style), size)
+                rows += [(meta, style)] + [(face, s) for s in LATIN if has(s)]
+        else:
+            rows += [(body, s) for s in LATIN if has(s)]
         rows += [(body, s) for s in (CJK if has(CJK[0]) else CJK_SC) if has(s)]
 
     heights = [int(f.size * 1.45) for f, _ in rows]
@@ -63,11 +68,11 @@ def render(folder, style="Regular"):
             for i, ch in enumerate(text):
                 d.text((PAD + i * size * 3, y), ch, font=f, fill=FG)
         else:
-            d.text((PAD, y), text, font=f, fill=FG)
+            d.text((PAD, y), text, font=f, fill=DIM if f is meta else FG)
         y += h
     d.fontmode = "1"
-    d.text((PAD, img.height - PAD - 4), f"{family} · {os.path.basename(path)} · {len(cmap)} glyphs", font=meta, fill=DIM)
-    out = os.path.join(HERE, "previews", folder + ("" if style == "Regular" else "-" + style.lower()) + ".png")
+    d.text((PAD, img.height - PAD - 4), f"{family} · {f'{len(STYLES[folder])} styles' if folder in STYLES else os.path.basename(path)} · {len(cmap)} glyphs", font=meta, fill=DIM)
+    out = os.path.join(HERE, "previews", folder + ".png")
     img.save(out, optimize=True)
     return out
 
@@ -76,5 +81,3 @@ if __name__ == "__main__":
     os.makedirs(os.path.join(HERE, "previews"), exist_ok=True)
     for folder in sorted(d for d in os.listdir(HERE) if glob.glob(os.path.join(HERE, d, "*.ttf"))):
         print(render(folder))
-        for style in STYLES.get(folder, []):
-            print(render(folder, style))
