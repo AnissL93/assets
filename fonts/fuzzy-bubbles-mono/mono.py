@@ -26,6 +26,8 @@ def build(src, dst, style):
         hmtx[name] = (W, glyf[name].xMin)
     for t in ('GPOS', 'kern', 'hdmx', 'LTSH'):   # kerning would break the grid
         if t in f: del f[t]
+    for fr in f['GSUB'].table.FeatureList.FeatureRecord:   # fi/fl/ff ligatures squash two letters into one cell
+        if fr.FeatureTag == 'liga': fr.Feature.LookupListIndex, fr.Feature.LookupCount = [], 0
     f['hhea'].advanceWidthMax = W
     f['post'].isFixedPitch = 1
     f['OS/2'].xAvgCharWidth = W
